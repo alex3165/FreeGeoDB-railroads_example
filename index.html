@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Simple example of how to eploit railroad datas</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+        <link href='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.css' rel='stylesheet' />
+        <style>
+            body {
+                margin: 0;
+                background-color: grey;
+                font-family: sans-serif;
+            }
+
+            #map {
+                width: 100%;
+                height: 100vh;
+            }
+
+            #panel {
+                width: 200px;
+                position: absolute;
+                height: 100vh;
+                z-index: 99;
+                right: 0;
+                top: 0;
+                background-color: white;
+            }
+
+            .buttons-group {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            .buttons-group li {
+                padding: 20px;
+                text-align: center;
+            }
+
+            .buttons-group li:hover,
+            .buttons-group li.active {
+                cursor: pointer;
+                background-color: #38A7FF;
+                color: white;
+            }
+
+            .buttons-group li:hover.close-btn {
+                background-color: #FF3C32;
+            }
+
+            .loader {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: #38A7FF;
+                top: 0;
+                left: 0;
+                z-index: 99999;
+            }
+
+            .loader h1 {
+                position: absolute;
+                width: 300px;
+                height: 40px;
+                color: white;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                margin: auto;
+                right: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="loader">
+            <h1>Loading datas ...</h1>
+        </div>
+
+
+        <div id="map" width="100%" style="height:100vh;"></div>
+        <div id="panel">
+            <ul class="buttons-group">
+
+            </ul>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+        <script src='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.js'></script>
+        <script src="data-processing-functional.js"></script>
+        <script src="panel.js"></script>
+
+        <script>
+            $.get('mapbox-config.json', function(config) {
+                var functionalProcessing = new FunctionalProcessing(false, config, function() {
+                    $('.loader').hide();
+                });
+
+                var simplepanel = new SimplePanel($('#panel'), functionalProcessing.getContinents(), function(continent) {
+                    $('.loader').show();
+                    setTimeout(function() {
+                        functionalProcessing.continentFilter(continent);
+                        $('.loader').hide();
+                    }, 10);
+                });
+            }, function(err) {
+                console.log("Can't retrieve mapbox config file", err);
+            });
+        </script>
+    </body>
+</html>

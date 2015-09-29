@@ -1,5 +1,5 @@
 
-var FunctionalProcessing = function(limit, mapboxConfig continentDisplayedCb) {
+var FunctionalProcessing = function(limit, mapboxConfig, continentDisplayedCb) {
     this.limit = limit;
     this.datas = [];
     this.resolve = undefined;
